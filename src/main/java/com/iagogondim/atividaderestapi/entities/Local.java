@@ -1,6 +1,10 @@
 package com.iagogondim.atividaderestapi.entities;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import java.util.Date;
 
 @Entity
 @Table(name = "tb_local")
@@ -29,7 +33,17 @@ public class Local {
 
   @Column
   private String cep;
-  
+
+  @CreationTimestamp
+  @Temporal(TemporalType.TIMESTAMP)
+  @Column
+  private Date createdAt;
+
+  @UpdateTimestamp
+  @Temporal(TemporalType.TIMESTAMP)
+  @Column
+  private Date updatedAt;
+
 
   public Local(Long id, String nome, String rua, int numero, String bairro, String cidade, String estado, String cep) {
     this.id = id;

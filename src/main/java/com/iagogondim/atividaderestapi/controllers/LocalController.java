@@ -24,9 +24,41 @@ public class LocalController {
 
   }
 
+  @PutMapping("/{id}")
+  public ResponseEntity<Object> atualizar(@PathVariable("id") Long id, @RequestBody Local novoLocal) {
+    Optional<Local> optional = localRepository.findById(id);
+    if (optional.isPresent()) {
+      Local local = optional.get();
+
+      // Atualizar os atributos do local com os valores do novo local
+      local.setNome(novoLocal.getNome());
+      local.setRua(novoLocal.getRua());
+      local.setNumero(novoLocal.getNumero());
+      local.setBairro(novoLocal.getBairro());
+      local.setCidade(novoLocal.getCidade());
+      local.setEstado(novoLocal.getEstado());
+      local.setCep(novoLocal.getCep());
+
+      localRepository.save(local);
+      return ResponseEntity.status(HttpStatus.OK).body(local);
+    } else {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Local não encontrado");
+    }
+  }
+
   @GetMapping("/")
   public ResponseEntity<List<Local>> listar() {
     return ResponseEntity.status(HttpStatus.OK).body(localRepository.findAll());
+  }
+
+  @GetMapping("/{id}")
+  public ResponseEntity<Object> buscarPorId(@PathVariable("id") Long id) {
+    Optional<Local> optional = localRepository.findById(id);
+    if (optional.isPresent()) {
+      return ResponseEntity.status(HttpStatus.OK).body(optional.get());
+    } else {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Local não encontrado");
+    }
   }
 
   @DeleteMapping("/{id}")
